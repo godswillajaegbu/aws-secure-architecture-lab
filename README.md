@@ -45,3 +45,41 @@ Principle of Least Privilege applied
 
 ## Lessons Learned
 Cloud security must prioritize access control, network segmentation, and monitoring.
+
+
+
+
+Components to include:
+
+VPC (10.0.0.0/16) → Big rectangle
+
+Public Subnet (10.0.1.0/24) → contains EC2 Instance + IGW
+
+Private Subnet (10.0.2.0/24) → contains EC2 Instance + DB (optional)
+
+Internet Gateway (IGW) → connected to Public Subnet
+
+NAT Gateway → optional, for private subnet internet access
+
+Security Groups / IAM → annotate on EC2
+
+S3 Bucket → connected to VPC (optional)
+
+Example Layout (ASCII-style for visualization):
+
+
+
+                ┌───────────────────────── VPC 10.0.0.0/16 ─────────────────────────┐
+                │                                                             │
+  Public Subnet │ 10.0.1.0/24                  Private Subnet 10.0.2.0/24       │
+ ┌─────────────┐│ ┌─────────────┐           ┌─────────────┐                     │
+ │ EC2 Web     ││ │ Internet GW │           │ EC2 App     │                     │
+ │ Server      ││ └─────────────┘           │ Server      │                     │
+ │ SG: SSH     ││                           │ SG: App only│                     │
+ └─────────────┘│                           └─────────────┘                     │
+                │                             │                                  │
+                │                             └─────> IAM Roles applied          │
+                │                                                             │
+                │                             S3 Bucket (secure access)        │
+                └─────────────────────────────────────────────────────────────┘
+
